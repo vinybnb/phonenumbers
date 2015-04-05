@@ -1,0 +1,117 @@
+/* CSS declarations go here */
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: small;
+    background-color:#e9eaed;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    font-family: Arial, sans-serif;
+}
+
+hr {
+    color: #f00;
+    background-color: #f00;
+}
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -30px;
+}
+
+    #wrap > .container-full {
+        padding-top: 70px;
+    }
+
+#push, #footer {
+    height: 30px;    
+}
+
+#footer {
+    padding-left: 10px;
+}
+
+    #footer label {
+        color: white;
+        padding-top: 5px;
+    }
+
+#footer, .navbar-default2 {
+    background-color: #0D5292;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#0D9DDC), to(#0D5292));
+    background: -webkit-radial-gradient(circle, #0D9DDC, #0D5292);
+    background: -moz-radial-gradient(circle, #0D9DDC, #0D5292);
+    background: -ms-radial-gradient(circle, #0D9DDC, #0D5292);
+}
+
+.container-full {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#btn-add {
+    color: #fff;
+    background-color: #000;
+}
+
+#btn-add:hover {
+    color: #0f0;
+}
+
+#datetimepicker {
+    max-width: 200px;
+}
+
+.green {
+    color: #0d62a2;
+}
+.red {
+    color: #f00;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.form-element {
+    padding: 5px;
+}
+
+.phone input {
+  box-sizing: border-box;
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-size: 1em;
+}
+
+.phone input:focus{
+  outline: 0;
+}
+
+.input-background {
+  background: #d2edf4;
+  background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
+  padding: 20px 15px 15px 15px;
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .form-element {
+        padding:0;
+    }
+}
