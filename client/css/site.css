@@ -30,7 +30,7 @@ hr {
     }
 
 #push, #footer {
-    height: 30px;    
+    height: 30px;
 }
 
 #footer {
@@ -101,6 +101,11 @@ hr {
 
 .phone input:focus{
   outline: 0;
+}
+
+.alert {
+  padding: 5px;
+  margin: 5px 0;
 }
 
 .input-background {

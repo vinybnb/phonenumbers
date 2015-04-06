@@ -1,9 +1,12 @@
 <template name="index">
 	<div class="row">
-		<div class="col-sm-8 col-md-4">		
+		<div class="col-sm-8 col-md-4">
 			<form class="phone">
-		    	<input type="text" name="phone" placeholder="Nhập số điện thoại" />
-		  	</form>
+		    <input type="text" name="number" placeholder="Nhập số điện thoại" autofocus/>
+		  </form>
+		  	{{#unless isValid}}
+		  	<div class="alert alert-danger alert-dismissible" role="alert">{{errorMessage}}</div>
+		  	{{/unless}}
 	  	</div>
 	</div>
 	<div class="row">
@@ -16,17 +19,17 @@
 							<option value="{{_id}}">{{name}}</option>
 						{{/each}}
   					</select>
-					<h5 class="green text-center">Chưa gửi: 300</h5>
+					<h5 class="green text-center">Chưa gửi: {{totalNotSent}}</h5>
 				</div>
 				<div class="panel-body">
-			    	<table class="table table-striped table-condensed">
+		    	<table class="table table-striped table-condensed">
 				    	<tbody>
 				    		{{#each notSentNumbers}}
-				    		<tr><td class="text-center">{{this}}</td><td><button type="button" class="close">&times;</button></td></tr>
+				    		<tr><td class="text-center">{{number}}</td><td><button type="button" class="close">&times;</button></td></tr>
 				    		{{/each}}
 				    	</tbody>
-			    	</table>
-			  	</div>
+			    </table>
+		  	</div>
 			</div>
 		</div>
 		<div class="col-xs-6 col-sm-4 col-md-2">
@@ -37,7 +40,7 @@
 						{{#each agents}}
 							<option value="{{_id}}">{{name}}</option>
 						{{/each}}
-  					</select>	
+  					</select>
 					<h5 class="red text-center">Đã gửi: 4000</h5>
 				</div>
 				<div class="panel-body">
@@ -46,7 +49,7 @@
 				    		{{#each SentNumbers}}
 				    		<tr><td class="text-center">{{this}}</td><td><button type="button" class="close">&times;</button></td></tr>
 				    		{{/each}}
-				    	</tbody>		
+				    	</tbody>
 			    	</table>
 			  	</div>
 			</div>

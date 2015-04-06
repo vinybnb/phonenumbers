@@ -5,3 +5,4 @@ Meteor.startup(function() {
   	});
   	Hooks.init();
 });
+Session.set('documentTitle', 'Quản lý số điện thoại khách hàng');
