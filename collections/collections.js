@@ -8,7 +8,11 @@ Phones collection
 - updatedAt
 */
 Phones = new Mongo.Collection("phones");
-
+// attach timestamp field to phone number
+Phones.attachBehaviour("timestampable", {
+  createdBy: 'userId',
+  updatedBy: false
+});
 /*
 Agents collection
 - _id

@@ -3,42 +3,69 @@ Template.index.helpers({
 		return Agents.find().fetch();
 	},
 	notSentNumbers: function() {
-		return Phones.find({isSent: false}, {sort: {updatedAt: -1}});
+		var leftAgentId = Session.get("leftAgentId");
+		if (leftAgentId === undefined || leftAgentId === "")
+			return Phones.find({isSent: false}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
+		return Phones.find({isSent: false, agentId: leftAgentId}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
 	},
 	SentNumbers: function() {
-		return ["0965309095", "0914444869", "0902226099", "0925556699", "0992229991"];
+		var rightAgentId = Session.get("rightAgentId");
+		if (rightAgentId === undefined || rightAgentId === "")
+			return Phones.find({isSent: true}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
+		return Phones.find({isSent: true, agentId: rightAgentId}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
 	},
-	isValid: function () {
-		return Session.get("isValid", true);
+	isError: function () {
+		Session.setDefault("isInvalid", false);
+		Session.setDefault("isExist", false);
+		return Session.get("isInvalid") || Session.get("isExist");
 	},
 	errorMessage: function() {
+		if (Session.get("isExist"))
+			return "Số điện thoại đã tồn tại!";
 		return "Số điện thoại không hợp lệ!";
 	},
 	totalNotSent: function() {
-		return Phones.find({isSent: false}).count();
+		var leftAgentId = Session.get("leftAgentId");
+		if (leftAgentId === undefined || leftAgentId === "")
+			return Phones.find({isSent: false}).count();
+		return Phones.find({isSent: false, agentId: leftAgentId}).count();
+	},
+	totalSent: function() {
+		var rightAgentId = Session.get("rightAgentId");
+		if (rightAgentId === undefined || rightAgentId === "")
+			return Phones.find({isSent: true}).count();
+		return Phones.find({isSent: false, agentId: rightAgentId}).count();
 	}
 });
 
 Template.index.events({
 	"submit .phone": function(event) {
+		// reset all session to the default value
+		Session.set("isInvalid", false);
+		Session.set("isExist", false);
+
 		// get the input text
 		var number = event.target.number.value.replace(/\D/g,'');
 		// check whether number is valid or not
 		var isValid = checkValidNumber(number);
-		if (isValid) {
-			Session.set("isValid", true);
-		} else {
-			Session.set("isValid", false);
+		if (!isValid) {
+			Session.set("isInvalid", true);
 			// prevent default form submit
 			return false;
 		}
+
+		// check whether the phone number is exist or not
+		if (Phones.findOne({number: number})) {
+			Session.set("isExist", true);
+			return false;
+		}
+
 		// get the agent id of the phone number
 		var agentId = getAgentIdByNumber(number);
 
 		// insert phone number to Phones collection
 		Phones.insert({
 			number: number,
-			userId: this.userId,
 			agentId: agentId,
 			isSent: false
 		});
@@ -48,6 +75,17 @@ Template.index.events({
 
 		// prevent default form submit
 		return false;
+	},
+	"click .close": function(event) {
+		// check whether the phone number is belong to this current user or not
+		var targetUserId = Phones.findOne({_id: event.target.id}).userId;
+		// remove the number with given id
+		if (Meteor.userId() === targetUserId)
+			Phones.remove({_id: event.target.id});
+	},
+	"change #agentsLeft": function(event) {
+		var leftAgentIdSelected = event.target.value;
+		Session.set("leftAgentId", leftAgentIdSelected);
 	}
 });
 
