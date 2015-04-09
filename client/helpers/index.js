@@ -5,14 +5,14 @@ Template.index.helpers({
 	notSentNumbers: function() {
 		var leftAgentId = Session.get("leftAgentId");
 		if (leftAgentId === undefined || leftAgentId === "")
-			return Phones.find({isSent: false}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
-		return Phones.find({isSent: false, agentId: leftAgentId}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
+			return Phones.find({isSent: false}, {sort: {createdAt: -1, updatedAt: -1}, limit: 12});
+		return Phones.find({isSent: false, agentId: leftAgentId}, {sort: {createdAt: -1, updatedAt: -1}, limit: 12});
 	},
 	SentNumbers: function() {
 		var rightAgentId = Session.get("rightAgentId");
 		if (rightAgentId === undefined || rightAgentId === "")
-			return Phones.find({isSent: true}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
-		return Phones.find({isSent: true, agentId: rightAgentId}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
+			return Phones.find({isSent: true}, {sort: {updatedAt: -1}, limit: 12});
+		return Phones.find({isSent: true, agentId: rightAgentId}, {sort: {updatedAt: -1}, limit: 12});
 	},
 	isError: function () {
 		Session.setDefault("isInvalid", false);
@@ -34,7 +34,7 @@ Template.index.helpers({
 		var rightAgentId = Session.get("rightAgentId");
 		if (rightAgentId === undefined || rightAgentId === "")
 			return Phones.find({isSent: true}).count();
-		return Phones.find({isSent: false, agentId: rightAgentId}).count();
+		return Phones.find({isSent: true, agentId: rightAgentId}).count();
 	}
 });
 
@@ -44,7 +44,7 @@ Template.index.events({
 		Session.set("isInvalid", false);
 		Session.set("isExist", false);
 
-		// get the input text
+		// get the input text, remove all non numeric values
 		var number = event.target.number.value.replace(/\D/g,'');
 		// check whether number is valid or not
 		var isValid = checkValidNumber(number);
@@ -77,15 +77,39 @@ Template.index.events({
 		return false;
 	},
 	"click .close": function(event) {
-		// check whether the phone number is belong to this current user or not
-		var targetUserId = Phones.findOne({_id: event.target.id}).userId;
-		// remove the number with given id
+		// get the id of the phone number
+		var id = event.target.parentNode.parentNode.id;
+		// check whether the phone number is belong to this current user or not.
+		var targetUserId = Phones.findOne({_id: id}).userId;
+		// if yes, we remove the number with given id
 		if (Meteor.userId() === targetUserId)
-			Phones.remove({_id: event.target.id});
+			Phones.remove({_id: id});
 	},
 	"change #agentsLeft": function(event) {
 		var leftAgentIdSelected = event.target.value;
 		Session.set("leftAgentId", leftAgentIdSelected);
+	},
+	"change #agentsRight": function(event) {
+		var rightAgentIdSelected = event.target.value;
+		Session.set("rightAgentId", rightAgentIdSelected);
+	},
+	"click .move-to-right": function(event) {
+		// get the id of the phone number
+		var id = event.target.parentNode.parentNode.id;
+		// check whether the phone number is belong to this current user or not
+		var targetUserId = Phones.findOne({_id: id}).userId;
+		// if yes, we update isSent field to move the number to the right table
+		if (Meteor.userId() === targetUserId)
+			Phones.update({_id: id}, {$set: {isSent: true}});
+	},
+	"click .move-to-left": function(event) {
+		// get the id of the phone number
+		var id = event.target.parentNode.parentNode.id;
+		// check whether the phone number is belong to this current user or not
+		var targetUserId = Phones.findOne({_id: id}).userId;
+		// if yes, we update isSent field to move the number to the right table
+		if (Meteor.userId() === targetUserId)
+			Phones.update({_id: id}, {$set: {isSent: false}});
 	}
 });
 
