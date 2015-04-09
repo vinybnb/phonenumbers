@@ -130,7 +130,7 @@ var getAgentIdByNumber = function(number) {
 	Agents.findOne({name: "Mobifone"})
 	// At the beginning of the number
 	// Mobifone: 090, 093, 0120, 0121, 0122, 0126, 0128
-	if (number.substring(0, 3) === "090" || number.substring(0, 3) === "090" || number.substring(0, 4) === "0120" || number.substring(0, 4) === "0121" || number.substring(0, 4) === "0122" || number.substring(0, 4) === "0126" || number.substring(0, 4) === "0128") return Agents.findOne({name: "Mobifone"})._id;
+	if (number.substring(0, 3) === "090" || number.substring(0, 3) === "093" || number.substring(0, 4) === "0120" || number.substring(0, 4) === "0121" || number.substring(0, 4) === "0122" || number.substring(0, 4) === "0126" || number.substring(0, 4) === "0128") return Agents.findOne({name: "Mobifone"})._id;
 	// Vinaphone: 091, 094, 0123, 0124, 0125, 0127, 0129
 	if (number.substring(0, 3) === "091" || number.substring(0, 3) === "094" || number.substring(0, 4) === "0123" || number.substring(0, 4) === "0124" || number.substring(0, 4) === "0125" || number.substring(0, 4) === "0127" || number.substring(0, 4) === "0129") return Agents.findOne({name: "Vinaphone"})._id;
 	// Vietnamobile: 092, 018
