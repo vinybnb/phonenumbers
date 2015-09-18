@@ -5,8 +5,8 @@ Template.index.helpers({
 	notSentNumbers: function() {
 		var leftAgentId = Session.get("leftAgentId");
 		if (leftAgentId === undefined || leftAgentId === "")
-			return Phones.find({isSent: false}, {sort: {createdAt: -1, updatedAt: -1}, limit: 12});
-		return Phones.find({isSent: false, agentId: leftAgentId}, {sort: {createdAt: -1, updatedAt: -1}, limit: 12});
+			return Phones.find({isSent: false}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
+		return Phones.find({isSent: false, agentId: leftAgentId}, {sort: {updatedAt: -1, createdAt: -1}, limit: 12});
 	},
 	SentNumbers: function() {
 		var rightAgentId = Session.get("rightAgentId");
@@ -80,10 +80,10 @@ Template.index.events({
 		// get the id of the phone number
 		var id = event.target.parentNode.parentNode.id;
 		// check whether the phone number is belong to this current user or not.
-		var targetUserId = Phones.findOne({_id: id}).userId;
+		// var targetUserId = Phones.findOne({_id: id}).userId;
 		// if yes, we remove the number with given id
-		if (Meteor.userId() === targetUserId)
-			Phones.remove({_id: id});
+		// if (Meteor.userId() === targetUserId)
+		Phones.remove({_id: id});
 	},
 	"change #agentsLeft": function(event) {
 		var leftAgentIdSelected = event.target.value;
@@ -97,19 +97,19 @@ Template.index.events({
 		// get the id of the phone number
 		var id = event.target.parentNode.parentNode.id;
 		// check whether the phone number is belong to this current user or not
-		var targetUserId = Phones.findOne({_id: id}).userId;
+		// var targetUserId = Phones.findOne({_id: id}).userId;
 		// if yes, we update isSent field to move the number to the right table
-		if (Meteor.userId() === targetUserId)
-			Phones.update({_id: id}, {$set: {isSent: true}});
+		// if (Meteor.userId() === targetUserId) {
+		Phones.update({_id: id}, {$set: {isSent: true}});
 	},
 	"click .move-to-left": function(event) {
 		// get the id of the phone number
 		var id = event.target.parentNode.parentNode.id;
 		// check whether the phone number is belong to this current user or not
-		var targetUserId = Phones.findOne({_id: id}).userId;
+		// var targetUserId = Phones.findOne({_id: id}).userId;
 		// if yes, we update isSent field to move the number to the right table
-		if (Meteor.userId() === targetUserId)
-			Phones.update({_id: id}, {$set: {isSent: false}});
+		// if (Meteor.userId() === targetUserId)
+		Phones.update({_id: id}, {$set: {isSent: false}});
 	}
 });
 
